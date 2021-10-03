@@ -1,20 +1,17 @@
 package com.july.wikipedia.fragments
 
+import com.july.wikipedia.WikiApplication
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.july.wikipedia.R
-import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.adapters.ArticleListItemRecyclerAdapter
+import com.july.wikipedia.localstore.services.HistoryService
 import com.july.wikipedia.managers.WikiManager
 import com.july.wikipedia.models.WikiPage
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_explore.*
-
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.noButton
@@ -23,7 +20,8 @@ import org.jetbrains.anko.yesButton
 
 class HistoryFragment : Fragment() {
     private var wikiManager: WikiManager? = null
-    var historyRecycler: RecyclerView? = null
+
+    private var historyRecycler: RecyclerView? = null
     private var adapter: ArticleListItemRecyclerAdapter = ArticleListItemRecyclerAdapter()
 
     init {
@@ -60,10 +58,10 @@ class HistoryFragment : Fragment() {
 
         doAsync {
             val historyArticles = wikiManager!!.getHistory()
-            adapter?.currentResults?.clear()
-            adapter?.currentResults?.addAll(historyArticles as ArrayList<WikiPage>)
+            adapter.currentResults.clear()
+            adapter.currentResults.addAll(historyArticles as ArrayList<WikiPage>)
 
-            activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+            activity?.runOnUiThread { adapter.notifyDataSetChanged() }
         }
     }
 
@@ -82,13 +80,13 @@ class HistoryFragment : Fragment() {
                 yesButton {
                     // yes was hit...
                     // clear history async
-                    adapter?.currentResults?.clear()
+                    adapter.currentResults.clear()
 
                     doAsync {
                         wikiManager?.clearHistory()
                     }
 
-                    activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+                    activity?.runOnUiThread { adapter.notifyDataSetChanged() }
                 }
                 noButton {
                     // let it blank

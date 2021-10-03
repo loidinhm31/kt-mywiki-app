@@ -1,21 +1,17 @@
 package com.july.wikipedia.activities
 
+import com.july.wikipedia.WikiApplication
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.july.wikipedia.R
-import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.managers.WikiManager
 import com.july.wikipedia.models.WikiPage
-import kotlinx.android.synthetic.main.activity_article_detail.*
 import org.jetbrains.anko.toast
 
 class ArticleDetailActivity : AppCompatActivity() {
@@ -28,7 +24,7 @@ class ArticleDetailActivity : AppCompatActivity() {
 
         wikiManager = (applicationContext as WikiApplication).wikiManager
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
         // create back button
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -39,18 +35,17 @@ class ArticleDetailActivity : AppCompatActivity() {
         // update toolbar's title
         supportActionBar!!.title = currentPage?.title
 
-        article_detail_webview?.webViewClient = object : WebViewClient() {
+        val detailWebView: WebView = findViewById(R.id.article_detail_webview)
+        detailWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-
                 return true
             }
         }
 
-        article_detail_webview.loadUrl(currentPage!!.fullurl!!)
-
+        detailWebView.loadUrl(currentPage!!.fullurl!!)
         wikiManager?.addHistory(currentPage!!)
 
     }
@@ -62,9 +57,9 @@ class ArticleDetailActivity : AppCompatActivity() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item!!.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             finish()
-        } else if (item!!.itemId == R.id.action_favorite) {
+        } else if (item.itemId == R.id.action_favorite) {
             try {
                 // determine if article is already for a favorite or not
                 if (wikiManager!!.getIsFavorite(currentPage!!.pageid!!)) {
@@ -76,6 +71,7 @@ class ArticleDetailActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 toast("Unable to update this article")
+                e.printStackTrace()
             }
         }
         return super.onOptionsItemSelected(item)

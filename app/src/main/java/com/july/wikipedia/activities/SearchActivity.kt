@@ -7,36 +7,32 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.july.wikipedia.R
-import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.adapters.ArticleListItemRecyclerAdapter
-import com.july.wikipedia.managers.WikiManager
-import kotlinx.android.synthetic.main.activity_search.*
+import com.july.wikipedia.providers.services.DataService
 
 class SearchActivity : AppCompatActivity() {
-
-    private var wikiManager: WikiManager? = null
-
+    private var articleService: DataService?= null
     private var adapter: ArticleListItemRecyclerAdapter = ArticleListItemRecyclerAdapter()
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        wikiManager = (applicationContext as WikiApplication).wikiManager
+        articleService = DataService()
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        search_result_recycler.layoutManager = LinearLayoutManager(this)
-        search_result_recycler.adapter = adapter
+        val searchRecyclerView: RecyclerView = findViewById(R.id.search_result_recycler)
+        searchRecyclerView.layoutManager = LinearLayoutManager(this)
+        searchRecyclerView.adapter = adapter
 
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item!!.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             finish()
         }
         return true
@@ -56,12 +52,10 @@ class SearchActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // do the search and update the elements
-                wikiManager?.search(query, 0, 20) { wikiResult ->
+                articleService?.search(query, 0, 20) { wikiResult ->
                     adapter.currentResults.clear()
                     adapter.currentResults.addAll(wikiResult.query!!.pages)
                     runOnUiThread{ adapter.notifyDataSetChanged() }
-
-
                 }
 
                 println("updated search")

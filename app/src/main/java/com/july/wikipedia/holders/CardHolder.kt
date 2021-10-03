@@ -2,7 +2,6 @@ package com.july.wikipedia.holders
 
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,7 +11,7 @@ import com.july.wikipedia.R
 import com.july.wikipedia.activities.ArticleDetailActivity
 import com.july.wikipedia.models.WikiPage
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.article_card_item.view.*
+
 
 class CardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val articleImageView: ImageView = itemView.findViewById<ImageView>(R.id.article_image)

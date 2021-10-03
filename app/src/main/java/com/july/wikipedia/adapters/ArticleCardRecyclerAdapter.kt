@@ -7,7 +7,7 @@ import com.july.wikipedia.R
 import com.july.wikipedia.holders.CardHolder
 import com.july.wikipedia.models.WikiPage
 
-class ArticleCardRecyclerAdapter() : RecyclerView.Adapter<CardHolder>() {
+class ArticleCardRecyclerAdapter : RecyclerView.Adapter<CardHolder>() {
     val currentResults: ArrayList<WikiPage> = ArrayList<WikiPage>()
     override fun getItemCount(): Int {
         return currentResults.size

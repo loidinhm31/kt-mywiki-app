@@ -12,7 +12,7 @@ import com.july.wikipedia.R
 import com.july.wikipedia.fragments.ExploreFragment
 import com.july.wikipedia.fragments.FavoritesFragment
 import com.july.wikipedia.fragments.HistoryFragment
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
     private val exploreFragment: ExploreFragment = ExploreFragment()
@@ -37,10 +37,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(toolbar_main)
+        setSupportActionBar(findViewById(R.id.toolbar_main))
 
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.navigation)
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fragment_container, exploreFragment)
