@@ -5,29 +5,43 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.july.wikipedia.R
-import com.july.wikipedia.adapters.ArticleListItemRecyclerAdapter
-import com.july.wikipedia.providers.services.DataService
+import com.july.wikipedia.WikiApplication
+import com.july.wikipedia.adapters.WikiItemAdapter
+import com.july.wikipedia.databinding.ActivitySearchBinding
+import com.july.wikipedia.managers.WikiManager
+import com.july.wikipedia.viewmodels.OverviewViewModel
+import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
-    private var articleService: DataService?= null
-    private var adapter: ArticleListItemRecyclerAdapter = ArticleListItemRecyclerAdapter()
+
+    private val viewModel: OverviewViewModel by viewModels()
+
+    private var wikiManager: WikiManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
-        articleService = DataService()
+        val binding = ActivitySearchBinding.inflate(layoutInflater)
+        val view: View = binding.root
+        setContentView(view)
 
-        setSupportActionBar(findViewById(R.id.toolbar))
+        binding.lifecycleOwner = this
+
+        binding.viewModel = viewModel
+
+
+        wikiManager = (applicationContext as WikiApplication).wikiManager
+
+        setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val searchRecyclerView: RecyclerView = findViewById(R.id.search_result_recycler)
-        searchRecyclerView.layoutManager = LinearLayoutManager(this)
-        searchRecyclerView.adapter = adapter
+        binding.searchResultRecycler.layoutManager = LinearLayoutManager(this)
+        binding.searchResultRecycler.adapter = WikiItemAdapter()
 
     }
 
@@ -52,14 +66,9 @@ class SearchActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // do the search and update the elements
-                articleService?.search(query, 0, 20) { wikiResult ->
-                    adapter.currentResults.clear()
-                    adapter.currentResults.addAll(wikiResult.query!!.pages)
-                    runOnUiThread{ adapter.notifyDataSetChanged() }
-                }
+                viewModel.searchItems(query, 0, 20)
 
                 println("updated search")
-
                 return false
             }
 
@@ -67,7 +76,6 @@ class SearchActivity : AppCompatActivity() {
                 return false
             }
         })
-
         return super.onCreateOptionsMenu(menu)
     }
 }

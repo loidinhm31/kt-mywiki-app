@@ -1,18 +1,13 @@
 package com.july.wikipedia.activities
 
-import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.july.wikipedia.R
 import com.july.wikipedia.fragments.ExploreFragment
 import com.july.wikipedia.fragments.FavoritesFragment
 import com.july.wikipedia.fragments.HistoryFragment
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val exploreFragment: ExploreFragment = ExploreFragment()
@@ -37,11 +32,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(findViewById(R.id.toolbar_main))
+        setSupportActionBar(toolbar_main)
 
-
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fragment_container, exploreFragment)

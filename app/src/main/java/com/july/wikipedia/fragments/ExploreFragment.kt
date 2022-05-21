@@ -3,64 +3,68 @@ package com.july.wikipedia.fragments
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+
 import android.view.Gravity
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.viewModels
+
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.july.wikipedia.R
+import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.activities.SearchActivity
-import com.july.wikipedia.adapters.ArticleCardRecyclerAdapter
+import com.july.wikipedia.adapters.WikiItemAdapter
+import com.july.wikipedia.databinding.FragmentExploreBinding
 import com.july.wikipedia.managers.NetworkManager
 import com.july.wikipedia.managers.WikiManager
-import com.july.wikipedia.providers.services.DataService
+import com.july.wikipedia.viewmodels.OverviewViewModel
+
+import java.lang.Exception
 
 
 class ExploreFragment : Fragment() {
-    private var articleService: DataService = DataService()
+    private val viewModel: OverviewViewModel by viewModels()
 
     private var wikiManager: WikiManager? = null
 
-    var searchCardView: CardView? = null
-    var exploreRecycler: RecyclerView? = null
-    var refresher: SwipeRefreshLayout? = null
-    var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
+    private var searchCardView: CardView? = null
 
+    var refresher: SwipeRefreshLayout? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        articleService = DataService()
-
+        wikiManager = (activity?.applicationContext as WikiApplication).wikiManager
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_explore, container, false)
+        val binding =  FragmentExploreBinding.inflate(inflater)
 
-        searchCardView = view.findViewById<CardView>(R.id.search_card_view)
-        exploreRecycler = view.findViewById<RecyclerView>(R.id.explore_article_recycler)
+        refresher = binding.refresher
+        searchCardView = binding.searchView
 
-        refresher = view.findViewById<SwipeRefreshLayout>(R.id.refresher)
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
+        binding.lifecycleOwner = this
+
+        // Giving the binding access to the OverviewViewModel
+        binding.viewModel = viewModel
 
         searchCardView!!.setOnClickListener{
             val searchIntent = Intent(context, SearchActivity::class.java)
             context?.startActivity(searchIntent)
         }
 
-        exploreRecycler!!.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        exploreRecycler!!.adapter = adapter
+        // Sets the adapter of the photosGrid RecyclerView
+        binding.exploreItemRecycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.exploreItemRecycler.adapter = WikiItemAdapter()
 
         refresher?.setOnRefreshListener {
             getRandomArticle()
@@ -68,22 +72,17 @@ class ExploreFragment : Fragment() {
 
         getRandomArticle()
 
-        return view
+        return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun getRandomArticle() {
         refresher?.isRefreshing = true
 
         try {
             val networkManager = NetworkManager()
             if (networkManager.isNetworkAvailable(requireContext())) {
+                viewModel.getRandomItems(15)
 
-                articleService.getRandom(50) { wikiResult ->
-                    adapter.currentResults.clear()
-                    adapter.currentResults.addAll(wikiResult.query!!.pages)
-                    requireActivity().runOnUiThread { adapter.notifyDataSetChanged() }
-                }
             } else {
                 val toast: Toast = Toast.makeText(context, "Couldn't refresh explore", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.CENTER, 0, 0)
@@ -96,7 +95,6 @@ class ExploreFragment : Fragment() {
             // show alert
             val builder = AlertDialog.Builder(activity)
             builder.setMessage(e.message).setTitle("ERROR!").show()
-            e.printStackTrace()
         }
     }
 }

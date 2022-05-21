@@ -1,6 +1,5 @@
 package com.july.wikipedia.activities
 
-import com.july.wikipedia.WikiApplication
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,11 +7,11 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import com.july.wikipedia.R
+import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.managers.WikiManager
 import com.july.wikipedia.models.WikiPage
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.activity_article_detail.*
 
 class ArticleDetailActivity : AppCompatActivity() {
     private var wikiManager: WikiManager? = null
@@ -24,28 +23,29 @@ class ArticleDetailActivity : AppCompatActivity() {
 
         wikiManager = (applicationContext as WikiApplication).wikiManager
 
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(toolbar)
         // create back button
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // get the page from the extras
         val wikiPageJson = intent.getStringExtra("page")
-        currentPage = Gson().fromJson<WikiPage>(wikiPageJson, WikiPage::class.java)
+//        currentPage = Gson().fromJson<WikiPage>(wikiPageJson, WikiPage::class.java)
 
         // update toolbar's title
         supportActionBar!!.title = currentPage?.title
 
-        val detailWebView: WebView = findViewById(R.id.article_detail_webview)
-        detailWebView.webViewClient = object : WebViewClient() {
+        val webView: WebView = findViewById(R.id.article_detail_webview)
+        webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                return true
+                return false
             }
         }
 
-        detailWebView.loadUrl(currentPage!!.fullurl!!)
+        webView.loadUrl(currentPage!!.fullurl!!)
+
         wikiManager?.addHistory(currentPage!!)
 
     }
@@ -64,14 +64,13 @@ class ArticleDetailActivity : AppCompatActivity() {
                 // determine if article is already for a favorite or not
                 if (wikiManager!!.getIsFavorite(currentPage!!.pageid!!)) {
                     wikiManager!!.removeFavorite(currentPage!!.pageid!!)
-                    toast("Article was removed from Favorites")
+//                    toast("Article was removed from Favorites")
                 } else {
                     wikiManager!!.addFavorite(currentPage!!)
-                    toast("Article was added to Favorites")
+//                    toast("Article was added to Favorites")
                 }
             } catch (e: Exception) {
-                toast("Unable to update this article")
-                e.printStackTrace()
+//                toast("Unable to update this article")
             }
         }
         return super.onOptionsItemSelected(item)

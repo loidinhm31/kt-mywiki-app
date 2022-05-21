@@ -1,8 +1,8 @@
 package com.july.wikipedia.models
 
-class WikiPage {
-    var pageid: Int?= null
-    var title: String?= null
-    var fullurl: String?= null
-    var thumbnail: WikiThumbnail?= null
-}
+data class WikiPage(
+    var pageid: Int?,
+    var title: String?,
+    var fullurl: String?,
+    var thumbnail: WikiThumbnail?
+)
