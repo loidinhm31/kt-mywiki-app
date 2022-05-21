@@ -70,6 +70,7 @@
                 android:id="@+id/explore_item_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="100dp"
                 app:listData="@{viewModel.wikiResult.query.pages}"
                 tools:listitem="@layout/view_item"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
