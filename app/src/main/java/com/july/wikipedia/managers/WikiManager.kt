@@ -1,25 +1,16 @@
 package com.july.wikipedia.managers
 
 import com.july.wikipedia.models.WikiPage
-import com.july.wikipedia.models.WikiResult
-import com.july.wikipedia.providers.ArticleDataProvider
 import com.july.wikipedia.repositories.FavoritesRepository
 import com.july.wikipedia.repositories.HistoryRepository
 
-class WikiManager(private val provider: ArticleDataProvider,
-                    private val favoritesRepository: FavoritesRepository,
-                    private val historyRepository: HistoryRepository) {
+class WikiManager(
+    private val favoritesRepository: FavoritesRepository,
+    private val historyRepository: HistoryRepository
+) {
 
     private var favoritesCache: ArrayList<WikiPage>? = null
     private var historyCache: ArrayList<WikiPage>? = null
-
-    fun search(term: String, skip: Int, take: Int, handler: (result: WikiResult) -> Unit?) {
-        return provider.search(term, skip, take, handler)
-    }
-
-    fun getRandom(take: Int, handler: (result: WikiResult) -> Unit?) {
-        return provider.getRandom(take, handler)
-    }
 
     fun getHistory(): ArrayList<WikiPage>? {
         if (historyCache == null) {
@@ -29,9 +20,9 @@ class WikiManager(private val provider: ArticleDataProvider,
     }
 
     fun getFavorites(): ArrayList<WikiPage>? {
-        if (favoritesCache == null) {
-            favoritesCache = favoritesRepository.getAllFavorites()
-        }
+//        if (favoritesCache == null) {
+//            favoritesCache = favoritesRepository.getAllFavorites()
+//        }
         return favoritesCache
     }
 
@@ -41,8 +32,8 @@ class WikiManager(private val provider: ArticleDataProvider,
     }
 
     fun removeFavorite(pageId: Int) {
-        favoritesRepository.removeFavoriteById(pageId)
-        favoritesCache = favoritesCache!!.filter { it.pageid != pageId } as ArrayList<WikiPage>
+//        favoritesRepository.removeFavoriteById(pageId)
+//        favoritesCache = favoritesCache!!.filter { it.pageid != pageId } as ArrayList<WikiPage>
     }
 
     fun getIsFavorite(pageId: Int): Boolean {

@@ -12,34 +12,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.viewModels
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.july.wikipedia.R
 import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.activities.SearchActivity
-import com.july.wikipedia.adapters.ArticleCardRecyclerAdapter
+import com.july.wikipedia.adapters.WikiItemAdapter
+import com.july.wikipedia.databinding.FragmentExploreBinding
 import com.july.wikipedia.managers.NetworkManager
 import com.july.wikipedia.managers.WikiManager
+import com.july.wikipedia.viewmodels.OverviewViewModel
 
 import java.lang.Exception
 
 
 class ExploreFragment : Fragment() {
-    //private val articleProvider: ArticleDataProvider = ArticleDataProvider()
+    private val viewModel: OverviewViewModel by viewModels()
 
     private var wikiManager: WikiManager? = null
 
-    var searchCardView: CardView? = null
-    var exploreRecycler: RecyclerView? = null
-    var refresher: SwipeRefreshLayout? = null
-    var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
+    private var searchCardView: CardView? = null
 
+    var refresher: SwipeRefreshLayout? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         wikiManager = (activity?.applicationContext as WikiApplication).wikiManager
     }
 
@@ -48,20 +46,25 @@ class ExploreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_explore, container, false)
+        val binding =  FragmentExploreBinding.inflate(inflater)
 
-        searchCardView = view.findViewById<CardView>(R.id.search_card_view)
-        exploreRecycler = view.findViewById<RecyclerView>(R.id.explore_article_recycler)
+        refresher = binding.refresher
+        searchCardView = binding.searchView
 
-        refresher = view.findViewById<SwipeRefreshLayout>(R.id.refresher)
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
+        binding.lifecycleOwner = this
+
+        // Giving the binding access to the OverviewViewModel
+        binding.viewModel = viewModel
 
         searchCardView!!.setOnClickListener{
             val searchIntent = Intent(context, SearchActivity::class.java)
             context?.startActivity(searchIntent)
         }
 
-        exploreRecycler!!.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        exploreRecycler!!.adapter = adapter
+        // Sets the adapter of the photosGrid RecyclerView
+        binding.exploreItemRecycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.exploreItemRecycler.adapter = WikiItemAdapter()
 
         refresher?.setOnRefreshListener {
             getRandomArticle()
@@ -69,7 +72,7 @@ class ExploreFragment : Fragment() {
 
         getRandomArticle()
 
-        return view
+        return binding.root
     }
 
     private fun getRandomArticle() {
@@ -77,14 +80,8 @@ class ExploreFragment : Fragment() {
 
         try {
             val networkManager = NetworkManager()
-            if (networkManager.isNetworkAvailable(context!!)) {
-
-                wikiManager?.getRandom(15) { wikiResult ->
-                    adapter.currentResults.clear()
-                    adapter.currentResults.addAll(wikiResult.query!!.pages)
-                    activity!!.runOnUiThread { adapter.notifyDataSetChanged() }
-                }
-
+            if (networkManager.isNetworkAvailable(requireContext())) {
+                viewModel.getRandomItems(15)
 
             } else {
                 val toast: Toast = Toast.makeText(context, "Couldn't refresh explore", Toast.LENGTH_SHORT)

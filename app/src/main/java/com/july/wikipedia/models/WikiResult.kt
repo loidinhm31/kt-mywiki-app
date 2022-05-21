@@ -1,5 +1,7 @@
 package com.july.wikipedia.models
 
-class WikiResult {
-    val query: WikiQueryData? = null
-}
+import com.squareup.moshi.Json
+
+data class WikiResult(
+    @Json(name = "query") val query: WikiQueryData?
+)

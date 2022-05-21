@@ -1,13 +1,8 @@
 package com.july.wikipedia.activities
 
-import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.july.wikipedia.R
 import com.july.wikipedia.fragments.ExploreFragment
 import com.july.wikipedia.fragments.FavoritesFragment
@@ -38,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar_main)
-
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 

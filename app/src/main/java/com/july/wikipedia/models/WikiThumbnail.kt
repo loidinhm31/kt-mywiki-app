@@ -1,7 +1,7 @@
 package com.july.wikipedia.models
 
-class WikiThumbnail {
-    val source: String?= null
-    val width: Int = 0
-    val height: Int = 0
-}
+data class WikiThumbnail(
+    val source: String?,
+    val width: Int?,
+    val height: Int?,
+)
