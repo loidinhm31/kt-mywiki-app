@@ -1,31 +1,37 @@
-package com.july.wikipedia.repositories
+package com.july.wikipedia.localstore.repositories
 
-import com.google.gson.Gson
 import com.july.wikipedia.models.WikiPage
-import com.july.wikipedia.models.WikiThumbnail
 
-class HistoryRepository(private val databaseHelper: ArticleDatabaseOpenHelper) {
-    private val TABLE_NAME: String = "History"
+class FavoritesRepository(val databaseHelper: ArticleDatabaseOpenHelper) {
+    private val TABLE_NAME: String = "Favorites"
 
     fun addFavorite(page: WikiPage) {
 //        databaseHelper.use {
 //            insert(TABLE_NAME,
-//                "id" to page.pageid,
-//                "title" to page.title,
-//                "url" to page.fullurl,
-//                "thumbnailJson" to Gson().toJson(page.thumbnail))
+//                    "id" to page.pageid,
+//                    "title" to page.title,
+//                    "url" to page.fullurl,
+//                    "thumbnailJson" to Gson().toJson(page.thumbnail))
 //
 //        }
     }
 
-    fun removePageById(pageId: Int) {
+    fun removeFavoriteById(pageId: Int) {
 //        databaseHelper.use {
 //            delete(TABLE_NAME, "id = {pageId}", "pageId" to pageId)
 //        }
     }
 
+    fun isArticleFavorite(pageId: Int) : Boolean {
+        // get favorites and filter
+        var pages = getAllFavorites()
 
-    fun getAllHistory() : ArrayList<WikiPage> {
+        return pages.any { page ->
+            page.pageid == pageId
+        }
+    }
+
+    fun getAllFavorites() : ArrayList<WikiPage> {
         var pages = ArrayList<WikiPage>()
 
 //        val articleRowParser = rowParser { id: Int, title: String, url: String, thumbnailJson: String ->

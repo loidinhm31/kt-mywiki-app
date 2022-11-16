@@ -14,8 +14,14 @@ import com.july.wikipedia.models.WikiPage
  * Updates the data shown in the [RecyclerView].
  */
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<WikiPage>?) {
+fun bindItemsRecyclerView(recyclerView: RecyclerView, data: List<WikiPage>?) {
     val adapter = recyclerView.adapter as WikiItemAdapter
+    adapter.submitList(data)
+}
+
+@BindingAdapter("searchData")
+fun bindSearchItemsRecyclerView(recyclerView: RecyclerView, data: List<WikiPage>?) {
+    val adapter = recyclerView.adapter as SearchItemAdapter
     adapter.submitList(data)
 }
 

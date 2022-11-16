@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.july.wikipedia.R
 import com.july.wikipedia.WikiApplication
-import com.july.wikipedia.adapters.WikiItemAdapter
+import com.july.wikipedia.adapters.SearchItemAdapter
 import com.july.wikipedia.databinding.ActivitySearchBinding
 import com.july.wikipedia.managers.WikiManager
 import com.july.wikipedia.viewmodels.OverviewViewModel
@@ -41,7 +41,7 @@ class SearchActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         binding.searchResultRecycler.layoutManager = LinearLayoutManager(this)
-        binding.searchResultRecycler.adapter = WikiItemAdapter()
+        binding.searchResultRecycler.adapter = SearchItemAdapter()
 
     }
 

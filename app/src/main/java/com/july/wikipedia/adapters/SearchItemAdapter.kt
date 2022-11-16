@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.july.wikipedia.activities.ArticleDetailActivity
-import com.july.wikipedia.databinding.ViewItemBinding
+import com.july.wikipedia.databinding.SearchItemBinding
 import com.july.wikipedia.models.WikiPage
 
 
-class WikiItemAdapter :
-    ListAdapter<WikiPage, WikiItemAdapter.WikiItemViewHolder>(DiffCallback) {
+class SearchItemAdapter :
+    ListAdapter<WikiPage, SearchItemAdapter.SearchItemViewHolder>(DiffCallback) {
 
     /**
      * The MarsPhotosViewHolder constructor takes the binding variable from the associated
      * GridViewItem, which nicely gives it access to the full [WikiPage] information.
      */
-    class WikiItemViewHolder(
-        private var binding: ViewItemBinding // same pattern name with layout
+    class SearchItemViewHolder(
+        private var binding: SearchItemBinding // same pattern name with layout
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -61,16 +61,16 @@ class WikiItemAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): WikiItemViewHolder {
-        return WikiItemViewHolder(
-            ViewItemBinding.inflate(LayoutInflater.from(parent.context))
+    ): SearchItemViewHolder {
+        return SearchItemViewHolder(
+            SearchItemBinding.inflate(LayoutInflater.from(parent.context))
         )
     }
 
     /**
      * Replaces the contents of a view (invoked by the layout manager)
      */
-    override fun onBindViewHolder(holder: WikiItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchItemViewHolder, position: Int) {
         val wikiPage = getItem(position)
         holder.bind(wikiPage)
     }

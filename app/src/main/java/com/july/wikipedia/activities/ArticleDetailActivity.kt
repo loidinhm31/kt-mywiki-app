@@ -7,6 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.july.wikipedia.R
 import com.july.wikipedia.WikiApplication
 import com.july.wikipedia.managers.WikiManager
@@ -29,7 +30,7 @@ class ArticleDetailActivity : AppCompatActivity() {
 
         // get the page from the extras
         val wikiPageJson = intent.getStringExtra("page")
-//        currentPage = Gson().fromJson<WikiPage>(wikiPageJson, WikiPage::class.java)
+        currentPage = Gson().fromJson(wikiPageJson, WikiPage::class.java)
 
         // update toolbar's title
         supportActionBar!!.title = currentPage?.title
@@ -44,7 +45,7 @@ class ArticleDetailActivity : AppCompatActivity() {
             }
         }
 
-        webView.loadUrl(currentPage!!.fullurl!!)
+        webView.loadUrl(currentPage?.fullurl!!)
 
         wikiManager?.addHistory(currentPage!!)
 

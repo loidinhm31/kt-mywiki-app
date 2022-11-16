@@ -1,9 +1,12 @@
-package com.july.wikipedia.repositories
+package com.july.wikipedia.localstore.repositories
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 
-class ArticleDatabaseOpenHelper(context: Context)  {
+class ArticleDatabaseOpenHelper(context: Context)
+//    : ManagedSQLiteOpenHelper(context,
+//    "ArticleDatabase.db", null, 1)
+{
 //    override fun onCreate(db: SQLiteDatabase?) {
 //        // define the tables in this database
 //        db?.createTable("Favorites", true,
