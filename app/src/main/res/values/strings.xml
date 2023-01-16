@@ -6,4 +6,6 @@
     <string name="title_history">History</string>
 
     <string name="favorites">Favorites</string>
+
+    <string name="refresh_page">Cannot Refreh Data</string>
 </resources>

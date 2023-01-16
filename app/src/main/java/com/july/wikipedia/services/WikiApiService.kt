@@ -1,6 +1,7 @@
 package com.july.wikipedia.services
 
-import com.july.wikipedia.models.WikiResult
+import androidx.lifecycle.LiveData
+import com.july.wikipedia.models.WikiResultDto
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -37,7 +38,7 @@ interface WikiApiService {
                                @Query(value = "prop") prop : String,
                                @Query(value = "grnlimit") grnLimit : Int,
                                @Query(value = "inprop") inProp : String,
-                               @Query(value = "pithumbsize") thumbSize : Int) : WikiResult
+                               @Query(value = "pithumbsize") thumbSize : Int) : WikiResultDto
 
     @GET("w/api.php")
     suspend fun searchItems(@Query(value = "action") action : String,
@@ -52,7 +53,7 @@ interface WikiApiService {
                             @Query(value = "pithumbsize") thumbSize : Int,
                             @Query(value = "pilimit") piLimit : Int,
                             @Query(value = "wbptterms") wbptTerms : String,
-                            @Query(value = "inprop") inProp : String) : WikiResult
+                            @Query(value = "inprop") inProp : String) : WikiResultDto
 
 }
 

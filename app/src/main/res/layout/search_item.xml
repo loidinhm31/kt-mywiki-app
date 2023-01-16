@@ -4,7 +4,7 @@
     <data>
         <variable
             name="resultPage"
-            type="com.july.wikipedia.models.WikiPage" />
+            type="com.july.wikipedia.models.WikiPageDto" />
     </data>
 
     <LinearLayout

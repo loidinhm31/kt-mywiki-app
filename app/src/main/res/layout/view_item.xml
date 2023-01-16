@@ -1,40 +1,47 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="resultPage"
-            type="com.july.wikipedia.models.WikiPage" />
+            type="com.july.wikipedia.models.WikiPageDto" />
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
+            android:layout_margin="16dp"
             app:cardElevation="16dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/article_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:imageUrl="@{resultPage.thumbnail.source}"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/baseline_photo_24"/>
+                    android:src="@drawable/baseline_photo_24"
+                    app:imageUrl="@{resultPage.thumbnail.source}" />
+
                 <TextView
                     android:id="@+id/article_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginTop="8dp"
-                    android:textAlignment="center"
-                    android:text="@{resultPage.title}"/>
+                    android:gravity="center"
+                    android:text="@{resultPage.title}"
+                    android:textAlignment="center" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
