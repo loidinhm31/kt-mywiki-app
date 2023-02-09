@@ -5,14 +5,14 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="com.july.wikipedia.viewmodels.OverviewViewModel" />
+            name="itemViewModel"
+            type="com.july.wikipedia.ui.viewmodels.ItemViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.ExploreFragment">
+        tools:context=".ui.fragments.ExploreFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -71,8 +71,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="100dp"
-                app:listData="@{viewModel.wikiResult.query.pages}"
+                android:clipToPadding="false"
+                app:wikiListData="@{itemViewModel.wikiPageDto}"
                 tools:listitem="@layout/view_item"/>
+
+            <ImageView
+                android:id="@+id/status_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:wikiApiStatus="@{itemViewModel.status}" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -23,22 +23,17 @@ class NetworkManager {
         }
 
         // Make sure that there is at least one interface to test against
-        if (info != null) {
-            // Iterate through the interfaces
-            for (i in info.indices) {
+        for (i in info.indices) {
 
-                val networkCapabilities: NetworkCapabilities =
-                    connectivity.getNetworkCapabilities(info[i])!!
+            val networkCapabilities: NetworkCapabilities =
+                connectivity.getNetworkCapabilities(info[i])!!
 
-                if (networkCapabilities != null) {
-                    if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                        && networkCapabilities.hasCapability(NET_CAPABILITY_VALIDATED))
-                        if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
-                            return true
-                }
-            }
+            if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                && networkCapabilities.hasCapability(NET_CAPABILITY_VALIDATED))
+                if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                    || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+                    return true
         }
         return false
     }
